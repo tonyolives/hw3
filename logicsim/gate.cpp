@@ -88,3 +88,69 @@ Event* Or2Gate::update(uint64_t current_time)
 	}
   return e;
 }
+
+// ctor for NOT gate
+NotGate::NotGate(Wire* input, Wire* output) : Gate(1, output)
+{
+	wireInput(0, input);
+}
+
+// update func for NOT gate
+Event* NotGate::update(uint64_t current_time)
+{
+
+	char state = 'X';
+	Event* e = nullptr;
+	
+	// check input state and update
+	for(auto w : m_inputs)
+	{
+		char in = w->getState();
+		if(in == '1')
+		{
+			state = '0';
+			break;
+		}
+		else if(in == '0')
+		{
+			state = '1';
+		}
+	}
+
+	// change state
+	if(state != m_current_state)
+	{
+		m_current_state = state;
+		uint64_t next = current_time + m_delay;
+		e = new Event {next, m_output,state};	
+	}
+	
+	return e;
+
+
+	/*
+	char state = m_inputs[0]->getState(); // read input state
+    char newState;
+
+    // apply NOT truth table
+    if (state == '0') {
+		newState = '1';
+	}
+    else if (state == '1'){
+		newState = '0';
+	}
+    else {
+		// undefined still undefined
+		newState = 'X';
+	}
+
+    if (newState != m_current_state)  // only trigger if state changes
+    {
+        m_current_state = newState;
+        uint64_t next_time = current_time + m_delay;
+        return new Event {next_time, m_output, newState}; // schedule event
+    }
+    
+    return nullptr;
+	*/
+}

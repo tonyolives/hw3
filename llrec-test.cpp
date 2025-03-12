@@ -67,9 +67,11 @@ void dealloc(Node* head)
 //   function object struct declarations
 // -----------------------------------------------
 
-
-
-
+struct isEven {
+    bool operator()(int value) {
+        return value % 2 == 0; // remove even nums
+    }
+};
 
 int main(int argc, char* argv[])
 {
@@ -81,14 +83,47 @@ int main(int argc, char* argv[])
     // -----------------------------------------------
     // Feel free to update any code below this point
     // -----------------------------------------------
+
+    // list: 8 9 12 19 6 8
+
+    // test pivot code
+    cout << "=== TEST PIVOT ===" << endl;
+    
     Node* head = readList(argv[1]);
     cout << "Original list: ";
     print(head);
 
-    // Test out your linked list code
+    Node* smaller = NULL;
+    Node* larger = NULL;
+    int pivot = 10;
 
+    cout << "Pivot of: " << pivot << endl;
 
+    llpivot(head, smaller, larger, pivot);
+    head = NULL;
+    cout << ">> smaller list: ";
+    print(smaller);
+    cout << ">> larger list: ";
+    print(larger);
 
+    dealloc(smaller);
+    dealloc(larger);
+
+    // test filter code
+    cout << endl;
+    cout << "=== TEST FILTER ===" << endl;
+
+    head = readList(argv[1]);
+    cout << "Original list: ";
+    print(head);
+
+    head = llfilter(head, isEven()); // filter out even nums
+    cout << ">> filtered list (removed evens): ";
+    print(head);
+    cout << endl;
+
+    // free remaining list memory
+    dealloc(head);
     
     return 0;
 

@@ -49,6 +49,9 @@ struct Node
  */
 void llpivot(Node *&head, Node *&smaller, Node *&larger, int pivot);
 
+// HELPER - recursive llpiviot using tail pointers
+void llpivotTail(Node *&head, Node *&smaller, Node *&larger, int pivot, Node *&smallerTail, Node *&largerTail);
+
 /**
  * Given a linked list pointed to by head, removes (filters out) nodes
  * whose value does not meet the criteria given by the predicate
@@ -84,6 +87,25 @@ Node* llfilter(Node* head, Comp pred)
     // Provide your implementation below
     //*********************************************
 
+    // base case - head is null
+    if (head == NULL) {
+        return NULL;
+    }
+
+    // check if value to be removed using functor
+    if (pred(head->val) == true) {
+        // save next node before deleting
+        Node* nextNode = head->next;
+        // delete node
+        delete head;
+        // try next node
+        return llfilter(nextNode, pred);
+    }
+    // value doesn't need to be removed
+    else {
+        head->next = llfilter(head->next, pred);
+        return head; // keep this node
+    }
 
 }
 
